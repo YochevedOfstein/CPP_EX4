@@ -43,7 +43,7 @@ bool Complex::operator!=(const Complex& other) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const Complex& c) {
-    os << c.real << " + " << c.imag << "i";
+    os << c.get_real() << " + " << c.get_imag() << "i";
     return os;
 }
 

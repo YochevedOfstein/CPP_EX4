@@ -21,17 +21,10 @@ class Tree{
 
     ~Tree() {
 
-        BFSIterator it = begin_bfs_scan();
-        BFSIterator pre = it;
-        BFSIterator end = end_bfs_scan();
-
-        while (it != end) {
-            pre = it;
-            ++it;
-            pre->remove_children();
+        for(auto it = begin_bfs_scan(); it != end_bfs_scan(); ++it){
+            it->remove_children();
         }
         root = nullptr;
-
     }
 
     Node<T>* get_root(){
@@ -41,11 +34,6 @@ class Tree{
     void add_root(Node<T>* newRoot){
         this->root = newRoot;
     }
-
-    // void add_root(T value){
-    //     Node<T>* newRoot = new Node<T>(value);
-    //     this->root = newRoot;
-    // }
 
     void add_sub_node(Node<T>* parent, Node<T>* child){
         if (!parent || !child) return;
@@ -57,13 +45,8 @@ class Tree{
             }
             parent->add_child(child);
         }
-    }
-
-    void add_sub_node(Node<T>* parent, T value){
-        if (!parent) return;
-        if(parent->children.size() < K){ 
-            Node<T>* child = new Node<T>(value);
-            parent->add_child(child);
+        else{
+            throw std::invalid_argument("Parent has too many children");
         }
     }
     
@@ -91,10 +74,9 @@ class Tree{
         void pushLeftmost(Node<T>* node) {
             while (node != nullptr) {
                 stack.push(node);
-                if(node->children.empty()){
+                if (node->children.empty()) {
                     node = nullptr;
-                }
-                else{
+                } else {
                     node = node->children[0];
                 }
             }
@@ -120,20 +102,13 @@ class Tree{
         InOrderIterator& operator++() {
             if (current == nullptr) return *this;
             Node<T>* node = current;
-            if (!node->children.empty()) {
-                if (node->children.size() > 1) {
-                    pushLeftmost(node->children[1]);
-                } 
-                else {
-                    current = nullptr;
-                    return *this;
-                }
+            if (node->children.size() > 1) {
+                pushLeftmost(node->children[1]);
             }
             if (!stack.empty()) {
                 current = stack.top();
                 stack.pop();
-            } 
-            else {
+            } else {
                 current = nullptr;
             }
             return *this;
@@ -249,11 +224,11 @@ class Tree{
             return *this;
         }
 
-        bool operator==(const PostOrderIterator& other){
+        bool operator==(const PostOrderIterator& other) const{
             return stack == other.stack;
         }
 
-        bool operator!=(const PostOrderIterator& other){
+        bool operator!=(const PostOrderIterator& other) const{
             return !(*this == other);
         }
     };
@@ -294,7 +269,7 @@ class Tree{
             return *this;
         }
 
-        bool operator==(const BFSIterator& other) {
+        bool operator==(const BFSIterator& other) const{
             if (myQueue.empty() && other.myQueue.empty()) {
                 return true;
             }
@@ -304,7 +279,7 @@ class Tree{
             return myQueue.front() == other.myQueue.front();
         }
 
-        bool operator!=(const BFSIterator& other) {
+        bool operator!=(const BFSIterator& other) const{
             return !(*this == other); 
         }
 
@@ -345,7 +320,7 @@ class Tree{
             return *this;
         }
 
-        bool operator==(const DFSIterator& other) {
+        bool operator==(const DFSIterator& other) const{
             if (stack.empty() && other.stack.empty()) {
                 return true;
             }
@@ -355,7 +330,7 @@ class Tree{
             return stack.top() == other.stack.top();  
         }
 
-        bool operator!=(const DFSIterator& other) {
+        bool operator!=(const DFSIterator& other) const{
             return !(*this == other); 
         }
 
@@ -489,11 +464,18 @@ class Tree{
         return DFSIterator(nullptr);
     }
 
-    HeapIterator myHeap(){
+    HeapIterator begin_make_heap_scan(){
         if(K == 2){
             return HeapIterator(root);
         }
         throw std::invalid_argument("HeapIterator only works for binary trees");  
+    }
+
+    HeapIterator end_make_heap_scan(){
+        if(K == 2){
+        return HeapIterator(nullptr);
+        }
+        throw std::invalid_argument("HeapIterator only works for binary trees");
     }
 
 };

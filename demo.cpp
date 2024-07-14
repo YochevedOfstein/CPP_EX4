@@ -5,6 +5,7 @@
 #include <string>
 #include "node.hpp"
 #include "tree.hpp"
+#include "complex.hpp"
 
 using namespace std;
 
@@ -15,7 +16,6 @@ int main()
     Tree<double> tree; // Binary tree that contains doubles.
 
     Node<double> root_node(1.1);
-    cout<<"Adding root node"<<endl;
 
     tree.add_root(&root_node);
 
@@ -85,7 +85,6 @@ int main()
     } // same as BFS: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6
     cout << endl;
 
-    // // cout << tree; // Should print the graph using GUI.
 
     cout << "New 3-ary tree" << endl;
 
@@ -119,5 +118,77 @@ int main()
         cout << node->get_value() << ", ";
     } // prints: 1.1, 1.2, 1.5, 1.3, 1.6, 1.4
     cout << endl;
+
+    cout << "New complex 2-ary tree" << endl;
+    Tree<Complex, 2> two_ary_complex_tree; 
+
+    Node<Complex> root_complex_node(Complex(1.1, 2));
+    Node<Complex> n1_complex(Complex(3, 4));
+    Node<Complex> n2_complex(Complex(5, 6));
+    Node<Complex> n3_complex(Complex(7, 8));
+    Node<Complex> n4_complex(Complex(3, 1));
+    Node<Complex> n5_complex(Complex(2, 10));
+
+
+    two_ary_complex_tree.add_root(&root_complex_node);
+    two_ary_complex_tree.add_sub_node(&root_complex_node, &n1_complex);
+    two_ary_complex_tree.add_sub_node(&root_complex_node, &n2_complex);
+    two_ary_complex_tree.add_sub_node(&n1_complex, &n3_complex);
+    two_ary_complex_tree.add_sub_node(&n1_complex, &n4_complex);
+    two_ary_complex_tree.add_sub_node(&n4_complex, &n5_complex);
+
+    //  // The tree should look like:   
+    // /**
+    //  *       root = 1.1 + 2i
+    //  *     /         |
+    //  *    3 + 4i    5 + 6i
+    //   *   /     |
+    //  *  7 + 8i  3 + i
+    //  *   /
+    //  *  2 + 10i
+    //  */
+
+
+    cout<<"Printing pre order:"<<endl;
+    for (auto node = two_ary_complex_tree.begin_pre_order(); node != two_ary_complex_tree.end_pre_order(); ++node)
+    {
+        cout << node->get_value() << ", ";
+    } // prints: 1.1 + 2i, 3 + 4i, 7 + 8i, 3 + i, 2 + 10i, 5 + 6i
+    cout << endl;
+
+    cout<<"Printing post order:"<<endl;
+    for (auto node = two_ary_complex_tree.begin_post_order(); node != two_ary_complex_tree.end_post_order(); ++node)
+    {
+        cout << node->get_value() << ", ";
+    } // prints: 7 + 8i, 2 + 10i, 3 + 1i, 3 + 4i, 5 + 6i, 1.1 + 2i,
+    cout << endl;
+
+    cout<<"Printing in order:"<<endl;
+    for (auto node = two_ary_complex_tree.begin_in_order(); node != two_ary_complex_tree.end_in_order(); ++node)
+    {
+        cout << node->get_value() << ", ";
+    } // prints: 7 + 8i, 3 + 4i, 2 + 10i, 3 + i, 1.1 + 2i, 5 + 6i
+    cout << endl;
+
+    cout<<"Printing BFS:"<<endl;
+    for (auto node = two_ary_complex_tree.begin_bfs_scan(); node != two_ary_complex_tree.end_bfs_scan(); ++node)
+    {
+        cout << node->get_value() << ", ";
+    } // prints: 1.1 + 2i, 3 + 4i, 5 + 6i, 7 + 8i, 3 + i, 2 + 10i
+    cout << endl;
+
+    cout<<"Printing DFS:"<<endl;
+    for (auto node = two_ary_complex_tree.begin_dfs_scan(); node != two_ary_complex_tree.end_dfs_scan(); ++node)
+    {
+        cout << node->get_value() << ", ";
+    } // prints: 1.1 + 2i, 3 + 4i, 7 + 8i, 3 + i, 2 + 10i, 5 + 6i
+    cout << endl;
+
+
+
+
+    return 0;
+
+
     
 }
