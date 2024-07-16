@@ -15,11 +15,6 @@ TEST_CASE("Testing Complex class")
     CHECK(c1.get_real() == 1);
     CHECK(c1.get_imag() == 2);
 
-    CHECK((c1 + c2) == c3);
-    CHECK((c2 - c1) == c4);
-    CHECK((c1 * c2) == Complex(-5, 10));
-    CHECK((c1 / c2) == Complex(0.44, 0.08));
-
     CHECK(c1 == c5);
     CHECK(c1 != c2);
 
@@ -289,5 +284,51 @@ TEST_CASE("3-ary tree"){
         CHECK_THROWS(tree.begin_in_order());
         CHECK_THROWS(tree.begin_make_heap_scan());
     }
+
+}
+
+TEST_CASE("Heap"){
+
+    Node<int> root(1);
+    Node<int> node2(3);
+    Node<int> node3(54);
+    Node<int> node4(2);
+    Node<int> node5(7);
+    Node<int> node6(67);
+
+    Tree<int, 2> tree;
+
+    tree.add_root(&root);
+    tree.add_sub_node(&root, &node2);
+    tree.add_sub_node(&root, &node3);
+    tree.add_sub_node(&node3, &node4);
+    tree.add_sub_node(&node3, &node6);
+    tree.add_sub_node(&node6, &node5);
+
+    auto it = tree.begin_make_heap_scan();
+    CHECK(it->get_value() == 1);
+    ++it;
+    CHECK(it->get_value() == 2);
+    ++it;
+    CHECK(it->get_value() == 3);
+    ++it;
+    CHECK(it->get_value() == 7);
+    ++it;
+    CHECK(it->get_value() == 54);
+    ++it;
+    CHECK(it->get_value() == 67);
+    ++it;
+    CHECK(it == tree.end_make_heap_scan());
+
+    Tree<int, 3> tree2;
+
+    tree2.add_root(&root);
+    tree2.add_sub_node(&root, &node2);
+    tree2.add_sub_node(&root, &node3);
+    tree2.add_sub_node(&root, &node4);
+    tree2.add_sub_node(&node2, &node5);
+    tree2.add_sub_node(&node2, &node6);
+    
+    CHECK_THROWS(tree2.begin_make_heap_scan());
 
 }

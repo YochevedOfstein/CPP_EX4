@@ -27,10 +27,11 @@ int main()
 
     tree.add_sub_node(&root_node, &n1);
     tree.add_sub_node(&root_node, &n2);
-
     tree.add_sub_node(&n1, &n3);
     tree.add_sub_node(&n1, &n4);
     tree.add_sub_node(&n2, &n5);
+
+    tree.runSFML();
    
     // // The tree should look like:
     // /**
@@ -48,7 +49,6 @@ int main()
     } // prints: 1.1, 1.2, 1.4, 1.5, 1.3, 1.6
     cout << endl;
 
-
     cout<<"Printing post order:"<<endl;
     for (auto node = tree.begin_post_order(); node != tree.end_post_order(); ++node)
     {
@@ -56,7 +56,6 @@ int main()
         // prints: 1.4, 1.5, 1.2, 1.6, 1.3, 1.1
     } 
     cout << endl;
-
 
     cout<<"Printing in order:"<<endl;
     for (auto node = tree.begin_in_order(); node != tree.end_in_order(); ++node)
@@ -79,6 +78,14 @@ int main()
     } // prints: 1.1, 1.2, 1.4, 1.5, 1.3, 1.6
     cout << endl;
 
+    cout<<"Printing Heap:"<<endl;
+    for(auto node = tree.begin_make_heap_scan(); node != tree.end_make_heap_scan(); ++node)
+    {
+        cout << node->get_value() << ", ";
+    } // prints: 1.1, 1.2, 1.4, 1.5, 1.3, 1.6
+    cout << endl;
+
+    cout<<"tree:"<<endl;
     for (auto node : tree)
     {
         cout << node << ", ";
@@ -95,6 +102,8 @@ int main()
     three_ary_tree.add_sub_node(&root_node, &n3);
     three_ary_tree.add_sub_node(&n1, &n4);
     three_ary_tree.add_sub_node(&n2, &n5);
+
+    three_ary_tree.runSFML();
 
     //  // The tree should look like:
     // /**
@@ -137,6 +146,8 @@ int main()
     two_ary_complex_tree.add_sub_node(&n1_complex, &n4_complex);
     two_ary_complex_tree.add_sub_node(&n4_complex, &n5_complex);
 
+    two_ary_complex_tree.runSFML();
+
     //  // The tree should look like:   
     // /**
     //  *       root = 1.1 + 2i
@@ -144,8 +155,8 @@ int main()
     //  *    3 + 4i    5 + 6i
     //   *   /     |
     //  *  7 + 8i  3 + i
-    //  *   /
-    //  *  2 + 10i
+    //  *           |
+    //  *          2 + 10i
     //  */
 
 
@@ -184,7 +195,12 @@ int main()
     } // prints: 1.1 + 2i, 3 + 4i, 7 + 8i, 3 + i, 2 + 10i, 5 + 6i
     cout << endl;
 
-
+    // cout<<"Printing Heap:"<<endl;
+    // for(auto node = two_ary_complex_tree.begin_make_heap_scan(); node != two_ary_complex_tree.end_make_heap_scan(); ++node)
+    // {
+    //     cout << node->get_value() << ", ";
+    // } // prints: 1.1 + 2i, 3 + 4i, 7 + 8i, 3 + i, 2 + 10i, 5 + 6i
+    // cout << endl;
 
 
     return 0;

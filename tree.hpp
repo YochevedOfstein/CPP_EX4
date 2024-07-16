@@ -6,8 +6,11 @@
 #include <vector>
 #include <stack>
 #include <queue>
+#include <sstream> 
+#include <iomanip>
 #include <algorithm>
 #include "node.hpp"
+#include <SFML/Graphics.hpp>
 
 
 template <typename T, size_t K = 2>
@@ -64,6 +67,8 @@ class Tree{
         }
         return nullptr;
     }
+
+    //////////////////////////////////////////////////////////////Iterators//////////////////////////////////////////////////////////////////
 
     class InOrderIterator{
 
@@ -343,52 +348,57 @@ class Tree{
         int currentId;
 
     public:
-        HeapIterator(Node<T>* root) : currentId(-1) {
-            if (root) {
-                heap.push_back(root);
-                for (size_t i = 0; i < heap.size(); ++i) {
-                    Node<T>* node = heap[i];
-                    for (Node<T>* child : node->children) {
-                        heap.push_back(child);
-                    }
-                }
-                currentId = heap.front()->getId();
+        HeapIterator(Node<T>* root) : currentId(0) {
+            if (root == nullptr) {
+                currentId = -1; 
+                return;
             }
+
+            std::queue<Node<T>*> bfsQueue;
+            bfsQueue.push(root);
+
+            while (!bfsQueue.empty()) {
+                Node<T>* current = bfsQueue.front();
+                bfsQueue.pop();
+
+                heap.push_back(current);
+                for (Node<T>* child : current->children) {
+                    bfsQueue.push(child);
+                }
+            }
+
+            std::make_heap(heap.begin(), heap.end(), [](Node<T>* a, Node<T>* b) {
+                return a->get_value() > b->get_value();
+            });
         }
 
         T& operator*() const {
-            for (size_t i = 0; i < heap.size(); ++i) {
-                if (heap[i]->getId() == currentId) {
-                    return heap[i]->get_value();
-                }
-            }
-            throw std::invalid_argument("Invalid iterator");
+            return heap[currentId]->get_value();
         }
 
         Node<T>* operator->() const {
-            for (size_t i = 0; i < heap.size(); ++i) {
-                if (heap[i]->getId() == currentId) {
-                    return heap[i];
-                }
-            }
-            throw std::invalid_argument("Invalid iterator");
+            return heap[currentId];
         }
 
         HeapIterator& operator++() {
-            for (size_t i = 0; i < heap.size(); ++i) {
-                if (heap[i]->getId() == currentId) {
-                    if (i + 1 < heap.size()) {
-                        currentId = heap[i + 1]->getId();
-                    } else {
-                        currentId = -1; 
-                    }
-                    break;
+            if (currentId >= heap.size()) {
+                currentId = -1; 
+            } else {
+                std::pop_heap(heap.begin(), heap.end(), [](Node<T>* a, Node<T>* b) {
+                    return a->get_value() > b->get_value(); 
+                });
+                heap.pop_back();
+                if (heap.empty()) {
+                    currentId = -1; 
                 }
             }
             return *this;
         }
 
         bool operator==(const HeapIterator& other) const {
+            if (currentId == -1 && other.currentId == -1) {
+                return true;
+            }
             return currentId == other.currentId;
         }
 
@@ -478,7 +488,85 @@ class Tree{
         throw std::invalid_argument("HeapIterator only works for binary trees");
     }
 
+    ////////////////////////////////////////////////////////////////Drawing//////////////////////////////////////////////////////////////
+
+
+    void runSFML() {
+        sf::RenderWindow window(sf::VideoMode(1000, 800), "Tree Visualizations");
+
+        sf::Font font;
+        if (!font.loadFromFile("arial.ttf")) {
+            throw std::invalid_argument("Font not found");
+        }
+
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                }
+            }
+
+            window.clear(sf::Color::White);
+            if (root) {
+                drawTree(window, root, 0, 0, 400, font);
+            } else {
+                std::cout << "Tree root is nullptr or empty" << std::endl;
+            }
+            window.display();
+        }
+    }
+
+    void drawTree(sf::RenderWindow &window, Node<T>* node, float x, float y, float offset, sf::Font &font) {
+        if (!node) {
+            return;
+        }
+        float windowCenterX = window.getSize().x / 2.0f;
+        float windowCenterY = 150.0f; 
+
+        float nodeX = windowCenterX + x;
+        float nodeY = windowCenterY + y;
+
+        sf::CircleShape circle(30);
+        circle.setFillColor(sf::Color::White);
+        circle.setOutlineThickness(1);
+        circle.setOutlineColor(sf::Color::Black);
+        circle.setPosition(nodeX, nodeY);
+        window.draw(circle);
+
+        sf::Text text;
+        text.setFont(font);
+        if constexpr (std::is_same<T, Complex>::value) {
+            text.setString(node->get_value().to_string()); 
+        } else {
+            std::stringstream ss;
+            ss << std::fixed << std::setprecision(2) << node->get_value();
+            text.setString(ss.str());
+        }
+        text.setCharacterSize(20);
+        text.setFillColor(sf::Color::Black);
+        text.setPosition(nodeX + 10, nodeY + 15);
+        window.draw(text);
+
+        float childXOffset = offset / 2.0f;
+        float childYOffset = 100.0f; 
+
+        for (size_t i = 0; i < node->children.size(); ++i) {
+            float childX = x + childXOffset * (i - (node->children.size() - 1) / 2.0f);
+            float childY = y + childYOffset;
+
+            sf::Vertex line[] = {
+                sf::Vertex(sf::Vector2f(nodeX + 30, nodeY + 60), sf::Color::Black),
+                sf::Vertex(sf::Vector2f(windowCenterX + childX + 30, windowCenterY + childY + 30), sf::Color::Black)
+            };
+            window.draw(line, 2, sf::Lines);
+
+            drawTree(window, node->children[i], childX, childY, childXOffset, font);
+        }
+    }
+
 };
+
 
 template <typename T, size_t K>
 std::ostream& operator<<(std::ostream& os, Tree<T, K>& tree) {
@@ -488,5 +576,6 @@ std::ostream& operator<<(std::ostream& os, Tree<T, K>& tree) {
     }
     return os;
 }
+
 
 #endif

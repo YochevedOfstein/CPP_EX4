@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "complex.hpp"
+#include <SFML/Graphics.hpp>
 
 
 template <typename T>
