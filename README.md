@@ -13,13 +13,7 @@ This project is an implementation of a tree data structure with various traversa
 - [Tests](#tests)
 
 ## Features
-There main features in this project are:
-
-* **Complex Numbers** 
-* **Node** 
-* **Tree** 
-* **Traversal Iterators** 
-* **GUI Visualization**
+The main features in this project are:
 
 ### Complex Numbers
 The Complex class represents complex numbers and provides functionality for comparison operations and printing.

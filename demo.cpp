@@ -195,13 +195,6 @@ int main()
     } // prints: 1.1 + 2i, 3 + 4i, 7 + 8i, 3 + i, 2 + 10i, 5 + 6i
     cout << endl;
 
-    // cout<<"Printing Heap:"<<endl;
-    // for(auto node = two_ary_complex_tree.begin_make_heap_scan(); node != two_ary_complex_tree.end_make_heap_scan(); ++node)
-    // {
-    //     cout << node->get_value() << ", ";
-    // } // prints: 1.1 + 2i, 3 + 4i, 7 + 8i, 3 + i, 2 + 10i, 5 + 6i
-    // cout << endl;
-
 
     return 0;
 
