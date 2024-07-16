@@ -1,6 +1,5 @@
-/**
- * Demo app for Ex4
- */
+// yocheved@davidowitz.net
+
 #include <iostream>
 #include <string>
 #include "node.hpp"

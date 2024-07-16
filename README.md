@@ -1,3 +1,5 @@
+// yocheved@davidowitz.net
+
 # System Programing 2 - assignmant 4
 
 This project is an implementation of a tree data structure with various traversal iterators (Pre-Order, Post-Order, In-Order, BFS, DFS, and Heap). It includes a graphical user interface (GUI) for visualizing the tree using SFML.
@@ -13,7 +15,7 @@ This project is an implementation of a tree data structure with various traversa
 - [Tests](#tests)
 
 ## Features
-The main features in this project are:
+The main features in this project are complex numbers, node, tree, traversal iterators and Gui visualation.
 
 ### Complex Numbers
 The Complex class represents complex numbers and provides functionality for comparison operations and printing.
@@ -35,7 +37,7 @@ The Node class is a generic class template for tree nodes. Each node contains a 
 * **Getters:** Provides access to the node's value and children.
 
 ### Tree
-The Tree class is a generic class template for tree structures. It supports multiple arities, with a default binary tree implementation.
+The Tree class is a generic class template for tree structures. It supports multiple arities, with a default binary tree implementation. The Tree class includes definitions for all the iterators and the GUI.
 
 **Key Functions:**
 
@@ -44,7 +46,7 @@ The Tree class is a generic class template for tree structures. It supports mult
 * **Add Sub Node:** Adds a child node to a specified parent node.
 
 ### Traversal Iterators
-The traversal iterators allow for easy iteration over the tree nodes in different orders.
+The traversal iterators are defined within the Tree class and allow for easy iteration over the tree nodes in different orders.
 
 **Traversal Types:**
 * **Pre-Order:** Visits the root node first, then recursively visits each subtree. Pre-Order only works with 2-ary trees.
@@ -52,10 +54,10 @@ The traversal iterators allow for easy iteration over the tree nodes in differen
 * **In-Order:** Recursively visits the left subtree, visits the root node, then recursively visits the right subtree. In-Order only works with 2-ary trees.
 * **BFS (Breadth-First Search):** Visits nodes level by level.
 * **DFS (Depth-First Search):** Visits nodes by diving deep into each branch before backtracking.
-* **Heap:** Converts the tree into a heap and visits nodes in the heap order.
+* **Heap:** Converts the tree into a heap and visits nodes in heap order.
 
 ### GUI Visualization
-The project includes a graphical user interface for visualizing the tree using SFML. The GUI displays the tree structure in a window, allowing for an interactive view of the tree's layout.
+The project includes a graphical user interface for visualizing the tree using SFML, which is also defined within the Tree class. The GUI displays the tree structure in a window, allowing for an interactive view of the tree's layout.
 
 ## How To Run
 To compile the project, use the following commands in your terminal:
