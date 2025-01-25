@@ -1,4 +1,3 @@
-// 324460682 yocheved@davidowitz.net
 
 #ifndef TREE_HPP
 #define TREE_HPP
