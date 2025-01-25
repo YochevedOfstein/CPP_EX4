@@ -1,4 +1,3 @@
-// 324460682 yocheved@davidowitz.net
 
 #ifndef NODE_HPP
 #define NODE_HPP
