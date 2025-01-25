@@ -1,4 +1,3 @@
-// 324460682 yocheved@davidowitz.net
 
 #ifndef COMPLEX_HPP
 #define COMPLEX_HPP
